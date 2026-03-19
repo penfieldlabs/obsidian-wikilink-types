@@ -1,0 +1,24 @@
+# Build output
+main.js
+*.js.map
+
+# Dependencies
+node_modules
+
+# IDE
+*.iml
+.idea
+.vscode
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+memory/
+.memory/
+CLAUDE.md
+.claude/
+
+# Obsidian
+data.json

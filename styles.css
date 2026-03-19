@@ -1,0 +1,34 @@
+.wikilink-types-popup {
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	box-shadow: var(--shadow-s);
+	max-height: min(300px, 60vh);
+	overflow-y: auto;
+	padding: 4px 0;
+	min-width: 200px;
+	max-width: 400px;
+}
+
+.wikilink-types-popup-item {
+	padding: 6px 12px;
+	cursor: pointer;
+}
+
+.wikilink-types-popup-item.is-selected {
+	background: var(--background-modifier-hover);
+}
+
+.wikilink-types-popup-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+.wikilink-types-popup-label {
+	font-weight: 600;
+	font-size: 0.9em;
+}
+
+.wikilink-types-popup-desc {
+	font-size: 0.8em;
+	color: var(--text-muted);
+}

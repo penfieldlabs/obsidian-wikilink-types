@@ -1,0 +1,81 @@
+name: Release Obsidian Plugin
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Validate tag matches manifest version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          MANIFEST=$(node -p "require('./manifest.json').version")
+          if [ "$TAG" != "$MANIFEST" ]; then
+            echo "::error::Tag v$TAG does not match manifest.json version $MANIFEST"
+            exit 1
+          fi
+
+      - name: Extract release notes from CHANGELOG
+        id: changelog
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          # Extract the section for this version from CHANGELOG.md
+          NOTES=$(awk "/^## \\[${VERSION}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
+          if [ -z "$NOTES" ]; then
+            NOTES="See [CHANGELOG.md](https://github.com/penfieldlabs/obsidian-wikilink-types/blob/main/CHANGELOG.md) for details."
+          fi
+          # Write to file to preserve newlines
+          echo "$NOTES" > /tmp/release-notes.txt
+
+      - name: Create plugin.zip
+        run: |
+          mkdir -p wikilink-types
+          cp main.js manifest.json styles.css wikilink-types/
+          zip -r plugin.zip wikilink-types/
+
+      - name: Build release body
+        run: |
+          echo "## What's New" > /tmp/release-body.md
+          echo "" >> /tmp/release-body.md
+          cat /tmp/release-notes.txt >> /tmp/release-body.md
+          echo "" >> /tmp/release-body.md
+          echo "## Install" >> /tmp/release-body.md
+          echo "" >> /tmp/release-body.md
+          echo '**BRAT:** Install [BRAT](https://github.com/TfTHacker/obsidian42-brat), then add `penfieldlabs/obsidian-wikilink-types` via Command Palette → "BRAT: Add a beta plugin for testing".' >> /tmp/release-body.md
+          echo "" >> /tmp/release-body.md
+          echo "**Manual:** Download \`plugin.zip\`, unzip, and copy the \`wikilink-types\` folder into your vault's \`.obsidian/plugins/\` directory. Then enable in Settings → Community Plugins." >> /tmp/release-body.md
+          echo "" >> /tmp/release-body.md
+          echo '**Drag & drop:** Download `plugin.zip`, unzip, then use Settings → Community Plugins → 📁 (Open plugins folder) to open the target directory and drop `wikilink-types` in.' >> /tmp/release-body.md
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            plugin.zip
+            main.js
+            manifest.json
+            styles.css
+          draft: false
+          body_path: /tmp/release-body.md
