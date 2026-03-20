@@ -1,4 +1,4 @@
-# Release Notes: obsidian-wikilink-types v1.0.0
+# Release Notes: obsidian-wikilink-types 1.0.0
 
 **Date:** March 19, 2026
 **Type:** Initial Release
