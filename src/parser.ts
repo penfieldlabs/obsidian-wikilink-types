@@ -9,9 +9,10 @@ const WIKILINK_WITH_ALIAS_RE = /\[\[([^\]|]+)\|([^\]]+)\]\]/g;
 /**
  * Regex to find @type tokens inside alias text.
  * Requires a space or start of string before @ to avoid matching emails like john@causes.com.
- * Captures: the type key (without @).
+ * No lookbehind — iOS < 16.4 does not support it.
+ * Captures: [1] the type key (without @).
  */
-const AT_TYPE_RE = /(?<=\s|^)@([\w-]+)/gm;
+const AT_TYPE_RE = /(?:^|\s)@([\w-]+)/gm;
 
 /**
  * Parse all typed wikilinks from document content.

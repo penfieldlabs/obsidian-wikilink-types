@@ -6,8 +6,6 @@ import { filterTypes, clampIndex } from "./autocomplete-utils";
 
 /** Popup offset from cursor in pixels */
 const POPUP_OFFSET_Y = 4;
-/** Popup z-index — above Obsidian's UI but below modals */
-const POPUP_Z_INDEX = "var(--layer-popover)";
 
 /**
  * Custom autocomplete popup for @ inside wikilink aliases.
@@ -191,7 +189,7 @@ export function buildCompletionExtension(
 			}
 
 			this.position();
-			this.popup.style.display = "block";
+			this.popup.classList.add("is-visible");
 		}
 
 		position(): void {
@@ -214,10 +212,8 @@ export function buildCompletionExtension(
 				top = coords.top - popupRect.height - POPUP_OFFSET_Y;
 			}
 
-			this.popup.style.position = "absolute";
-			this.popup.style.left = Math.max(0, left) + "px";
-			this.popup.style.top = Math.max(0, top) + "px";
-			this.popup.style.zIndex = POPUP_Z_INDEX;
+			this.popup.style.setProperty("left", Math.max(0, left) + "px");
+			this.popup.style.setProperty("top", Math.max(0, top) + "px");
 		}
 
 		accept(idx: number): void {

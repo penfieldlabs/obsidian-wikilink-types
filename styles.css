@@ -1,4 +1,7 @@
 .wikilink-types-popup {
+	display: none;
+	position: absolute;
+	z-index: var(--layer-popover);
 	background: var(--background-primary);
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
@@ -8,6 +11,10 @@
 	padding: 4px 0;
 	min-width: 200px;
 	max-width: 400px;
+}
+
+.wikilink-types-popup.is-visible {
+	display: block;
 }
 
 .wikilink-types-popup-item {

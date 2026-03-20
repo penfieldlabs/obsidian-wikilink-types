@@ -16,7 +16,7 @@ export default class WikilinkTypesPlugin extends Plugin {
 			raw = await this.loadData();
 		} catch (err) {
 			console.error("wikilink-types: failed to load plugin data", err);
-			new Notice("Wikilink Types: failed to load config, using defaults");
+			new Notice("Wikilink types: failed to load config, using defaults");
 		}
 
 		const data = loadPluginData(raw);
@@ -53,16 +53,18 @@ export default class WikilinkTypesPlugin extends Plugin {
 		const existing = this.syncTimers.get(file.path);
 		if (existing) clearTimeout(existing);
 
-		const timer = setTimeout(async () => {
-			this.syncTimers.delete(file.path);
-			this.syncing.add(file.path);
-			try {
-				await syncFrontmatter(this.app, file, this.relationshipTypes);
-			} catch (err) {
-				console.error("wikilink-types: frontmatter sync failed", err);
-			} finally {
-				this.syncing.delete(file.path);
-			}
+		const timer = setTimeout(() => {
+			void (async () => {
+				this.syncTimers.delete(file.path);
+				this.syncing.add(file.path);
+				try {
+					await syncFrontmatter(this.app, file, this.relationshipTypes);
+				} catch (err) {
+					console.error("wikilink-types: frontmatter sync failed", err);
+				} finally {
+					this.syncing.delete(file.path);
+				}
+			})();
 		}, SYNC_DEBOUNCE_MS);
 
 		this.syncTimers.set(file.path, timer);
