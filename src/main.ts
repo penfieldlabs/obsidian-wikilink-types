@@ -11,9 +11,9 @@ export default class WikilinkTypesPlugin extends Plugin {
 	relationshipTypes: RelationshipType[] = [];
 
 	async onload(): Promise<void> {
-		let raw: PluginData | null = null;
+		let raw: unknown = null;
 		try {
-			raw = await this.loadData();
+			raw = await this.loadData() as unknown;
 		} catch (err) {
 			console.error("wikilink-types: failed to load plugin data", err);
 			new Notice("Wikilink types: failed to load config, using defaults");

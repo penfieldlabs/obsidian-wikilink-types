@@ -79,7 +79,7 @@ export async function syncFrontmatter(
 	const validKeys = new Set(relationshipTypes.map((rt) => rt.key));
 	const desired = buildRelationshipMap(body, validKeys);
 
-	await app.fileManager.processFrontMatter(file, (frontmatter) => {
+	await app.fileManager.processFrontMatter(file, (frontmatter: Record<string, unknown>) => {
 		if (frontmatterMatchesDesired(frontmatter, desired, validKeys)) return;
 
 		for (const key of validKeys) {

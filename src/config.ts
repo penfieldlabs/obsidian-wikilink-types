@@ -31,7 +31,7 @@ export function validateRelationshipTypes(data: unknown): RelationshipType[] | n
 	if (!Array.isArray(data)) return null;
 	const seen = new Set<string>();
 	const result: RelationshipType[] = [];
-	for (const item of data) {
+	for (const item of data as Record<string, unknown>[]) {
 		if (
 			typeof item !== "object" ||
 			item === null ||
@@ -41,12 +41,13 @@ export function validateRelationshipTypes(data: unknown): RelationshipType[] | n
 		) {
 			return null;
 		}
-		if (seen.has(item.key)) {
-			console.warn(`wikilink-types: duplicate relationship type key "${item.key}" in config, skipping`);
+		const key = item.key;
+		if (seen.has(key)) {
+			console.warn(`wikilink-types: duplicate relationship type key "${key}" in config, skipping`);
 			continue;
 		}
-		seen.add(item.key);
-		result.push(item as RelationshipType);
+		seen.add(key);
+		result.push({ key, label: item.label, description: item.description });
 	}
 	return result;
 }
