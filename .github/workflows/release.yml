@@ -3,7 +3,7 @@ name: Release Obsidian Plugin
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+*"
+      - "[0-9]+.[0-9]+.[0-9]+*"
 
 permissions:
   contents: write
@@ -30,7 +30,7 @@ jobs:
 
       - name: Validate tag matches manifest version
         run: |
-          TAG="${GITHUB_REF#refs/tags/v}"
+          TAG="${GITHUB_REF#refs/tags/}"
           MANIFEST=$(node -p "require('./manifest.json').version")
           if [ "$TAG" != "$MANIFEST" ]; then
             echo "::error::Tag v$TAG does not match manifest.json version $MANIFEST"
@@ -40,7 +40,7 @@ jobs:
       - name: Extract release notes from CHANGELOG
         id: changelog
         run: |
-          VERSION="${GITHUB_REF#refs/tags/v}"
+          VERSION="${GITHUB_REF#refs/tags/}"
           # Extract the section for this version from CHANGELOG.md
           NOTES=$(awk "/^## \\[${VERSION}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
           if [ -z "$NOTES" ]; then

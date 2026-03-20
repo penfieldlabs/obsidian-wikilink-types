@@ -28,4 +28,4 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Full compatibility with Dataview, Graph Link Types, Breadcrumbs, Juggl
 - AGPL-3.0 license
 
-[1.0.0]: https://github.com/penfieldlabs/obsidian-wikilink-types/releases/tag/v1.0.0
+[1.0.0]: https://github.com/penfieldlabs/obsidian-wikilink-types/releases/tag/1.0.0
