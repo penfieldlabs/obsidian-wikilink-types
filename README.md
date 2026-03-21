@@ -103,6 +103,12 @@ If you uninstall the plugin:
 - All Dataview queries continue to work
 - Graph Link Types continues to work
 
+## AI-Assisted Relationship Discovery
+
+The [Vault Linker](skill/SKILL.md) skill lets AI agents (Claude Code, OpenClaw, etc.) analyze your vault and discover relationships between notes. The agent reads your notes, identifies connections you might have missed, and writes them in the Wikilink Types format — with your approval.
+
+See [`skill/SKILL.md`](skill/SKILL.md) for the full skill specification.
+
 ## License
 
 [AGPL-3.0](LICENSE)
