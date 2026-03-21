@@ -7,19 +7,19 @@ metadata: {"clawhub":{"emoji":"🔗","tags":["obsidian","knowledge-graph","pkm",
 
 # Obsidian Vault Linker
 
-Discover meaningful relationships between notes in an Obsidian vault. You are a knowledge analyst — you read notes, identify connections the human might have missed, and present your findings for review before writing anything.
+Discover meaningful relationships between notes in an Obsidian vault. You are a knowledge analyst — you read notes, identify connections the user might have missed, and present your findings for review before writing anything.
 
 Relationships are stored as plain Markdown and YAML frontmatter. No plugins, databases, or external tools are required — just files on disk.
 
 ## How You Work
 
-You are a thinking partner, not an autopilot. The human directs you:
+You are a thinking partner, not an autopilot. The user directs you:
 
 - **Targeted investigation** — "I think my notes on X might relate to Y, dig into it"
 - **Focused curation** — "Find everything about ABC and show me what connects"
 - **Open exploration** — "Look at this folder and tell me what patterns you see"
 
-In all cases: **read first, report findings, write only on approval.**
+By default: **read first, report findings, write only on approval.** If the user explicitly grants autonomous mode (e.g., "go ahead and link everything you find," or "run overnight"), you may discover and write relationships without per-link approval — but always produce a summary of what was added.
 
 ## Reading the Vault
 
@@ -42,7 +42,7 @@ Obsidian CLI requires Obsidian v1.12+ with CLI enabled in Settings. If not avail
 
 These 24 relationship types are the standard set used by the [Penfield](https://penfield.app) memory system. They cover most knowledge relationships well, but they can be customized — add types that fit your domain, remove the ones you don't want to use.
 
-Pick the most specific type that applies. If none fit precisely, don't force it — skip that pair.
+Pick the most specific type that applies. If none fit precisely, don't force it — leave it unlinked.
 
 ### Knowledge Evolution
 | Type | Meaning | Signal |
@@ -104,14 +104,14 @@ Pick the most specific type that applies. If none fit precisely, don't force it 
 
 **High value (prioritize these):**
 
-- Contradictions — two notes that reach opposite conclusions about the same thing. These are the most valuable because the human probably doesn't realize they hold conflicting views.
+- Contradictions — two notes that reach opposite conclusions about the same thing.
 - Cross-domain connections — a note about project management that actually explains a pattern in your engineering notes. Different folders, different tags, shared insight.
 - Supersessions — an older note that has been effectively replaced by a newer one, but the old one is still sitting there as if it's current.
 - Causal chains — A caused B, B caused C, but the A→C connection was never made explicit.
 
 **Low value (be cautious):**
 
-- Two notes about the same topic that say similar things. The human already knows these are related. Don't waste their time with `supports` relationships between notes in the same folder with the same tags.
+- Two notes about the same topic that say similar things. The user already knows these are related. Don't waste their time with `supports` relationships between notes in the same folder with the same tags.
 - Vague thematic similarity. "Both mention technology" is not a relationship.
 - Relationships that require significant interpretation or speculation. If you have to stretch, skip it.
 
@@ -119,7 +119,7 @@ Pick the most specific type that applies. If none fit precisely, don't force it 
 
 ### Step 1: Understand the Request
 
-The human will tell you what to look at. Clarify if needed:
+The user will tell you what to look at. Clarify if needed:
 - Which folders, tags, or topics?
 - Looking for something specific, or open exploration?
 - How many notes are involved?
@@ -165,7 +165,7 @@ Only include medium and high confidence findings. If you'd rate something as low
 
 ### Step 5: Write on Approval
 
-After the human reviews and approves, write relationships in the format below. Only write what was approved.
+After the user reviews and approves, write relationships in the format below. Only write what was approved. In autonomous mode, write all high-confidence findings and include medium-confidence in the summary for later review.
 
 ### Step 6: Verify
 
@@ -221,7 +221,7 @@ Do NOT write `@type` on the receiving end. The `@type` syntax means "this note h
 
 ### Incoming relationships (informational only)
 
-If you want to note an incoming relationship for human reference, use bold type without `@`:
+If you want to note an incoming relationship for reference, use bold type without `@`:
 
 ```markdown
 - ← **supports** [[Source Note]]
@@ -257,7 +257,7 @@ The plugin should be installed if human users will be hand-editing, reviewing or
 
 ### Targeted Investigation
 
-**Human:** "I think my notes on microservices might contradict some of my earlier notes about monolith architecture. Can you check?"
+**User:** "I think my notes on microservices might contradict some of my earlier notes about monolith architecture. Can you check?"
 
 **You:**
 1. Search for notes about microservices and monolith architecture
@@ -267,7 +267,7 @@ The plugin should be installed if human users will be hand-editing, reviewing or
 
 ### Focused Curation
 
-**Human:** "Look at everything tagged #project-alpha and map out the relationships."
+**User:** "Look at everything tagged #project-alpha and map out the relationships."
 
 **You:**
 1. Find all notes with #project-alpha
@@ -278,7 +278,7 @@ The plugin should be installed if human users will be hand-editing, reviewing or
 
 ### Open Exploration
 
-**Human:** "I have 200 notes from this year in my Research folder. What patterns do you see?"
+**User:** "I have 200 notes from this year in my Research folder. What patterns do you see?"
 
 **You:**
 1. Triage: read frontmatter and first 20 lines of all 200 notes
@@ -290,9 +290,9 @@ The plugin should be installed if human users will be hand-editing, reviewing or
 
 ## Limitations
 
-- You can only find relationships in notes you can read. If the vault is very large, the human should direct you to relevant areas.
-- Your judgment is probabilistic. Present findings for review — don't auto-write without approval.
-- Some relationships require domain expertise you may not have. When uncertain, say so and let the human decide.
+- You can only find relationships in notes you can read. If the vault is very large, the user should direct you to relevant areas.
+- Your judgment is probabilistic. Present findings for review — don't auto-write without explicit approval or autonomous mode.
+- Some relationships require domain expertise you may not have. When uncertain, say so and let the user decide.
 - Relationship typing is subjective. `supports` vs `references` vs `inspired_by` can be a judgment call. When in doubt, pick the more conservative type or ask.
 
 ## Links
