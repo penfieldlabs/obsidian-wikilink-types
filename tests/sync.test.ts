@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { stripFrontmatter, buildRelationshipMap, frontmatterMatchesDesired } from "../src/sync";
+import { stripFrontmatter, stripCodeContent, buildRelationshipMap, frontmatterMatchesDesired } from "../src/sync";
+import type { SectionCache } from "obsidian";
 
 describe("stripFrontmatter", () => {
 	it("strips standard frontmatter with LF endings", () => {
@@ -56,6 +57,87 @@ describe("stripFrontmatter", () => {
 	});
 });
 
+describe("stripCodeContent", () => {
+	// Helper to build a SectionCache for a code block spanning lines start..end
+	function codeSection(startLine: number, endLine: number): SectionCache {
+		return {
+			type: "code",
+			position: {
+				start: { line: startLine, col: 0, offset: 0 },
+				end: { line: endLine, col: 0, offset: 0 },
+			},
+		};
+	}
+
+	it("strips fenced code block using SectionCache", () => {
+		const body = "Real text\n```\n[[A|@supports]]\n```\nMore text";
+		const sections = [codeSection(1, 3)];
+		const result = stripCodeContent(body, sections);
+		expect(result).not.toContain("@supports");
+		expect(result).toContain("Real text");
+		expect(result).toContain("More text");
+	});
+
+	it("strips multiple code blocks using SectionCache", () => {
+		const body = "Start\n```\n[[A|@supports]]\n```\nMiddle\n```\n[[B|@contradicts]]\n```\nEnd";
+		const sections = [codeSection(1, 3), codeSection(5, 7)];
+		const result = stripCodeContent(body, sections);
+		expect(result).not.toContain("@supports");
+		expect(result).not.toContain("@contradicts");
+		expect(result).toContain("Start");
+		expect(result).toContain("Middle");
+		expect(result).toContain("End");
+	});
+
+	it("preserves typed wikilinks outside code blocks", () => {
+		const body = "[[A|@supports]] this\n```\n[[B|@contradicts]]\n```";
+		const sections = [codeSection(1, 3)];
+		const result = stripCodeContent(body, sections);
+		expect(result).toContain("@supports");
+		expect(result).not.toContain("@contradicts");
+	});
+
+	it("strips inline code", () => {
+		const body = "See `[[A|@supports]]` for example";
+		const result = stripCodeContent(body, []);
+		expect(result).not.toContain("@supports");
+		expect(result).toContain("See");
+		expect(result).toContain("for example");
+	});
+
+	it("strips inline code even when SectionCache is provided", () => {
+		const body = "Real [[A|@supports]] and `[[B|@contradicts]]` inline";
+		const result = stripCodeContent(body, []);
+		expect(result).toContain("@supports");
+		expect(result).not.toContain("@contradicts");
+	});
+
+	it("falls back to regex when no sections provided", () => {
+		const body = "Text\n```\n[[A|@supports]]\n```\nMore";
+		const result = stripCodeContent(body, undefined);
+		expect(result).not.toContain("@supports");
+		expect(result).toContain("Text");
+		expect(result).toContain("More");
+	});
+
+	it("regex fallback handles tilde fences", () => {
+		const body = "Text\n~~~\n[[A|@supports]]\n~~~\nMore";
+		const result = stripCodeContent(body, undefined);
+		expect(result).not.toContain("@supports");
+	});
+
+	it("returns body unchanged when no code blocks present", () => {
+		const body = "Just [[A|@supports]] plain text";
+		const result = stripCodeContent(body, []);
+		expect(result).toBe(body);
+	});
+
+	it("handles empty body", () => {
+		expect(stripCodeContent("", [])).toBe("");
+		expect(stripCodeContent("", undefined)).toBe("");
+	});
+});
+
 describe("buildRelationshipMap", () => {
 	const validKeys = new Set(["supports", "contradicts", "supersedes", "causes"]);
 
@@ -99,6 +181,22 @@ describe("buildRelationshipMap", () => {
 	it("returns empty map for empty content", () => {
 		const map = buildRelationshipMap("", validKeys);
 		expect(map.size).toBe(0);
+	});
+
+	it("ignores typed wikilinks in code blocks when pre-stripped", () => {
+		const raw = "Real [[A|text @supports]]\n```\n[[B|example @contradicts]]\n```";
+		const cleaned = stripCodeContent(raw, undefined);
+		const map = buildRelationshipMap(cleaned, validKeys);
+		expect(map.get("supports")).toEqual(["[[A]]"]);
+		expect(map.has("contradicts")).toBe(false);
+	});
+
+	it("ignores typed wikilinks in inline code when pre-stripped", () => {
+		const raw = "See `[[A|@supports]]` but [[B|real @contradicts]]";
+		const cleaned = stripCodeContent(raw, undefined);
+		const map = buildRelationshipMap(cleaned, validKeys);
+		expect(map.has("supports")).toBe(false);
+		expect(map.get("contradicts")).toEqual(["[[B]]"]);
 	});
 });
 
