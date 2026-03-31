@@ -109,6 +109,8 @@ The [Vault Linker](skill/SKILL.md) skill lets AI agents (Claude Code, OpenClaw, 
 
 See [`skill/SKILL.md`](skill/SKILL.md) for the full skill specification.
 
+For autonomous/overnight linking of entire vaults, see [`prompts/autonomous-vault-linking.md`](prompts/autonomous-vault-linking.md).
+
 ## License
 
 [AGPL-3.0](LICENSE)

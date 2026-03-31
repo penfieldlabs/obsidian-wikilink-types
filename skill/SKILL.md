@@ -44,6 +44,8 @@ These 24 relationship types are the standard set used by the [Penfield](https://
 
 Pick the most specific type that applies. If none fit precisely, don't force it — leave it unlinked.
 
+**Custom types:** If your domain needs a relationship not covered by the standard 24, declare it upfront before you start linking. Common additions include `discusses` (for content that substantively covers a topic) and `summarizes` (for condensed versions of other notes). Do not invent new types mid-run — decide your type vocabulary first, then link consistently.
+
 ### Knowledge Evolution
 | Type | Meaning | Signal |
 |------|---------|--------|
@@ -124,6 +126,16 @@ The user will tell you what to look at. Clarify if needed:
 - Looking for something specific, or open exploration?
 - How many notes are involved?
 
+### Hub-and-Spoke Vaults
+
+Many knowledge bases have **hub notes** (concepts, topics, MOCs) that act as central nodes, with **spoke notes** (articles, chapters, meeting notes, transcripts) linking into them. If the vault has this architecture:
+
+1. Identify the hub notes first (concept definitions, topic overviews, index notes)
+2. Link spoke notes into hubs before looking for lateral spoke-to-spoke connections
+3. Hub-to-hub relationships (e.g., one concept is `prerequisite_for` another) are often the highest-value links in the vault
+
+If the vault doesn't have hub notes but should, suggest creating them — but don't create them without approval.
+
 ### Step 2: Read and Summarize
 
 Read the relevant notes. For each, extract:
@@ -133,6 +145,8 @@ Read the relevant notes. For each, extract:
 - Existing tags and links
 
 For large sets (50+ notes), triage first: read the frontmatter and first 20 lines of each note to extract title, tags, dates, and core subject. Use this to identify candidate pairs for deep reading. Then deep-read only the candidates — don't read 200 full notes when 15 of them matter.
+
+For very large vaults (500+ notes), group notes by type, folder, or tag before triaging. Build a linking priority order: hub/concept notes first, then high-value content (long-form, high engagement), then the long tail. Process in batches — don't try to hold the entire vault in context at once.
 
 ### Step 3: Identify Candidates
 
@@ -171,11 +185,13 @@ After the user reviews and approves, write relationships in the format below. On
 
 After writing relationships, re-read each modified note to confirm:
 - Frontmatter keys and inline `@type` links match (same relationships in both places)
+- Every wikilink target resolves to an actual file in the vault (no broken links)
 - Existing content is preserved — nothing was deleted or overwritten
 - No duplicate relationships were introduced
 - YAML frontmatter is valid (proper quoting, no syntax errors)
+- Only declared relationship types were used (no types invented mid-run)
 
-If anything is wrong, fix it immediately. File edits are the most error-prone step.
+If anything is wrong, fix it immediately. File edits are the most error-prone step. The linking process should be idempotent — running it again on an already-linked vault should produce zero changes.
 
 ## Writing Format
 
@@ -232,10 +248,11 @@ This is informational only. It does not create frontmatter and is ignored by the
 ### Rules
 
 1. Always write both frontmatter AND inline `@type` links — they must match
-2. If the note already has a `## Relationships` section, append to it
+2. If the note already has a `## Relationships` section, append to it. If the note has typed links woven into other sections (e.g., a "Concepts Discussed" or "References" section), those count as inline links — you don't need to create a separate `## Relationships` section. Frontmatter must still match.
 3. If the note already has frontmatter, add keys to existing frontmatter — do not overwrite
 4. Do not duplicate existing relationships
 5. Preserve all existing content — you are adding, not replacing
+6. Only use relationship types from the standard 24 or your declared custom types — do not invent new types during a linking pass
 
 ## Plugin (Optional — For Human Editing)
 
