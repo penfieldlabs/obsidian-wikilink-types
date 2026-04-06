@@ -185,7 +185,7 @@ After the user reviews and approves, write relationships in the format below. On
 
 After writing relationships, re-read each modified note to confirm:
 - Frontmatter keys and inline `@type` links match (same relationships in both places)
-- Every wikilink target resolves to an actual file in the vault (no broken links)
+- Every wikilink target resolves to an actual file in the vault (no broken links) — unless the calling prompt defers broken-link checking to a separate verify pass (e.g., when running in parallel with other agents whose work may not be committed yet)
 - Existing content is preserved — nothing was deleted or overwritten
 - No duplicate relationships were introduced
 - YAML frontmatter is valid (proper quoting, no syntax errors)
