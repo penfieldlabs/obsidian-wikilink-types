@@ -44,7 +44,7 @@ These 24 relationship types are the standard set used by the [Penfield](https://
 
 Pick the most specific type that applies. If none fit precisely, don't force it — leave it unlinked.
 
-**Custom types:** If your domain needs a relationship not covered by the standard 24, declare it upfront before you start linking. Common additions include `discusses` (for content that substantively covers a topic) and `summarizes` (for condensed versions of other notes). Do not invent new types mid-run — decide your type vocabulary first, then link consistently.
+**Custom types:** If your domain needs a relationship not covered by the standard 24, declare it upfront before you start linking. Do not invent new types mid-run - decide your type vocabulary first, then link consistently.
 
 ### Knowledge Evolution
 | Type | Meaning | Signal |
