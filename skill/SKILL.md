@@ -316,4 +316,5 @@ The plugin should be installed if human users will be hand-editing, reviewing or
 
 - **Plugin**: [Wikilink Types](https://github.com/penfieldlabs/obsidian-wikilink-types) — optional Obsidian plugin for human authoring and editing with autocomplete
 - **Penfield**: [penfield.app](https://penfield.app) — cloud memory system utilizing the same 24 relationship types
+- **Penfield OpenClaw Plugin**: [penfieldlabs/openclaw-penfield](https://github.com/penfieldlabs/openclaw-penfield)
 - **Pairs well with**: The [Obsidian skill by steipete](https://clawhub.ai/steipete/obsidian) (vault search, create, move, rename operations)
