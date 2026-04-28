@@ -103,7 +103,7 @@ If you uninstall the plugin:
 - All Dataview queries continue to work
 - Graph Link Types continues to work
 
-### Content Ingestion
+## Content Ingestion
 
 [PENgram](https://github.com/penfieldlabs/pengram) extracts structured notes from 
 YouTube videos, documents, and other content sources — ready for relationship 
