@@ -103,6 +103,13 @@ If you uninstall the plugin:
 - All Dataview queries continue to work
 - Graph Link Types continues to work
 
+### Content Ingestion
+
+[PENgram](https://github.com/penfieldlabs/pengram) extracts structured notes from 
+YouTube videos, documents, and other content sources — ready for relationship 
+discovery by the Vault Linker. PENgram handles ingestion; Wikilink Types handles 
+the connections.
+
 ## AI-Assisted Relationship Discovery
 
 The [Vault Linker](skill/SKILL.md) skill lets AI agents (Claude Code, OpenClaw, etc.) analyze your vault and discover relationships between notes. The agent reads your notes, identifies connections you might have missed, and writes them in the Wikilink Types format — with your approval.
