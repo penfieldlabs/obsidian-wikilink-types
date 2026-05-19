@@ -1,43 +1,28 @@
-# Release Notes: obsidian-wikilink-types 1.0.0
+# Release Notes: obsidian-wikilink-types 1.0.1
 
-**Date:** March 19, 2026
-**Type:** Initial Release
+**Date:** May 19, 2026
+**Type:** Patch — code quality and scorecard hygiene
+
+---
+
+## What's Changed
+
+### Fixed
+
+- **Popout window compatibility:** replaced bare `document`, `setTimeout`, and `clearTimeout` references with Obsidian-safe `activeDocument`, `createDiv()`, `activeWindow.setTimeout()`, and `activeWindow.clearTimeout()`
+- **Dev dependency vulnerabilities:** upgraded esbuild, vite, picomatch, postcss, brace-expansion, yaml, fast-uri — `npm audit` now reports 0 vulnerabilities
+- **README:** removed outdated placeholder text ("coming soon", "pre-listing"), updated installation instructions to reflect Community Plugins listing
+- **Release workflow:** removed unnecessary `plugin.zip` asset, added `actions/attest@v4` artifact attestation for `main.js` and `styles.css`, added lint step
+
+### No behavior changes
+
+Autocomplete, frontmatter sync, and all user-facing functionality are identical to 1.0.0.
 
 ---
 
 ## Overview
 
 Obsidian plugin that adds typed relationships to wikilinks. Type `@` inside a wikilink alias to trigger an autocomplete dropdown of relationship types. On selection, the plugin syncs the relationship to YAML frontmatter automatically — so Dataview, Graph Link Types, Breadcrumbs, and the rest of the Obsidian ecosystem can consume it without changes.
-
----
-
-## What's New
-
-### Autocomplete
-- `@` trigger inside wikilink aliases — after a space or right after `|`
-- Multiple `@types` per wikilink for natural display text (e.g. `[[Note|This @supersedes and @contradicts the old work]]`)
-- Popup with keyboard navigation (Arrow keys, Enter/Tab to accept, Escape to dismiss)
-- Mouse click selection
-- Case-insensitive filtering by key or label
-- Viewport-aware positioning (stays within screen bounds)
-- ARIA attributes for accessibility (listbox, option, aria-selected)
-- Email-safe: `john@causes.com` is ignored — `@` only triggers after a space or at alias start
-
-### Frontmatter Sync
-- Automatic sync of typed wikilinks to YAML frontmatter on save
-- Multiple `@types` per link each create their own frontmatter entry
-- Debounced writes (500ms) to avoid write storms
-- Re-trigger prevention (skips write when frontmatter already matches)
-- Only touches keys that match configured relationship types
-- Removes frontmatter keys when all typed links of that type are deleted
-- `@` in display text that doesn't match a configured type is left alone
-
-### Configuration
-- 24 default relationship types (Penfield vocabulary)
-- Fully configurable via `data.json` in the plugin directory
-- Duplicate key detection with console warning
-- Graceful fallback to defaults on corrupted config
-- No settings UI — edit JSON directly (settings tab planned for v1.1)
 
 ---
 
@@ -87,22 +72,27 @@ If you uninstall the plugin:
 
 ## Installation
 
-### BRAT (pre-listing)
+### Community Plugins
 
-If the plugin isn't in the Community Plugins directory yet:
+1. Open **Settings → Community Plugins → Browse**
+2. Search for **Wikilink Types**
+3. Click **Install**, then **Enable**
 
-1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) from Community Plugins
+### BRAT
+
+To test pre-release versions, install via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
+
+1. Install BRAT from Community Plugins
 2. Open Command Palette → **BRAT: Add a beta plugin for testing**
 3. Paste: `penfieldlabs/obsidian-wikilink-types`
 4. Click **Add Plugin**, then enable in Settings → Community Plugins
 
 ### Manual
 
-1. Download `plugin.zip` from the [latest release](https://github.com/penfieldlabs/obsidian-wikilink-types/releases)
-2. Unzip and copy the `wikilink-types` folder into your vault's `.obsidian/plugins/` directory
-3. Enable the plugin in Settings → Community Plugins
-
-Use Settings → Community Plugins → 📁 (Open plugins folder) to open the target directory for drag and drop.
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/penfieldlabs/obsidian-wikilink-types/releases)
+2. Create a `wikilink-types` folder in your vault's `.obsidian/plugins/` directory
+3. Copy the three files into that folder
+4. Enable the plugin in **Settings → Community Plugins**
 
 ---
 
