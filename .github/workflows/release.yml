@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   build:
@@ -21,6 +23,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Lint
+        run: npx eslint . --config eslint.config.mts
 
       - name: Run tests
         run: npm run test
@@ -42,18 +47,12 @@ jobs:
         run: |
           VERSION="${GITHUB_REF#refs/tags/}"
           # Extract the section for this version from CHANGELOG.md
-          NOTES=$(awk "/^## \\[${VERSION}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
+          NOTES=$(awk "/^## \\[?${VERSION}\\]?/{found=1; next} /^## /{if(found) exit} found{print}" CHANGELOG.md)
           if [ -z "$NOTES" ]; then
             NOTES="See [CHANGELOG.md](https://github.com/penfieldlabs/obsidian-wikilink-types/blob/main/CHANGELOG.md) for details."
           fi
           # Write to file to preserve newlines
           echo "$NOTES" > /tmp/release-notes.txt
-
-      - name: Create plugin.zip
-        run: |
-          mkdir -p wikilink-types
-          cp main.js manifest.json styles.css wikilink-types/
-          zip -r plugin.zip wikilink-types/
 
       - name: Build release body
         run: |
@@ -63,17 +62,23 @@ jobs:
           echo "" >> /tmp/release-body.md
           echo "## Install" >> /tmp/release-body.md
           echo "" >> /tmp/release-body.md
+          echo "**Community Plugins:** Search for **Wikilink Types** in Settings → Community Plugins → Browse." >> /tmp/release-body.md
+          echo "" >> /tmp/release-body.md
           echo '**BRAT:** Install [BRAT](https://github.com/TfTHacker/obsidian42-brat), then add `penfieldlabs/obsidian-wikilink-types` via Command Palette → "BRAT: Add a beta plugin for testing".' >> /tmp/release-body.md
           echo "" >> /tmp/release-body.md
-          echo "**Manual:** Download \`plugin.zip\`, unzip, and copy the \`wikilink-types\` folder into your vault's \`.obsidian/plugins/\` directory. Then enable in Settings → Community Plugins." >> /tmp/release-body.md
-          echo "" >> /tmp/release-body.md
-          echo '**Drag & drop:** Download `plugin.zip`, unzip, then use Settings → Community Plugins → 📁 (Open plugins folder) to open the target directory and drop `wikilink-types` in.' >> /tmp/release-body.md
+          echo "**Manual:** Download \`main.js\`, \`manifest.json\`, and \`styles.css\` below. Create a \`wikilink-types\` folder in your vault's \`.obsidian/plugins/\` directory, copy the three files in, then enable in Settings → Community Plugins." >> /tmp/release-body.md
+
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            main.js
+            styles.css
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            plugin.zip
             main.js
             manifest.json
             styles.css

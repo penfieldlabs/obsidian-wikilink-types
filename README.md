@@ -42,15 +42,15 @@ You never touch YAML. The `@` syntax is the authoring interface. The YAML is the
 
 ## Installation
 
-### Community Plugins (coming soon)
+### Community Plugins
 
 1. Open **Settings → Community Plugins → Browse**
 2. Search for **Wikilink Types**
 3. Click **Install**, then **Enable**
 
-### BRAT (pre-listing)
+### BRAT
 
-If the plugin isn't in the Community Plugins directory yet, install via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
+To test pre-release versions, install via [BRAT](https://github.com/TfTHacker/obsidian42-brat):
 
 1. Install BRAT from Community Plugins
 2. Open Command Palette → **BRAT: Add a beta plugin for testing**
@@ -59,11 +59,12 @@ If the plugin isn't in the Community Plugins directory yet, install via [BRAT](h
 
 ### Manual
 
-1. Download `plugin.zip` from the [latest release](https://github.com/penfieldlabs/obsidian-wikilink-types/releases)
-2. Unzip and copy the `wikilink-types` folder into your vault's `.obsidian/plugins/` directory
-3. Enable the plugin in **Settings → Community Plugins**
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/penfieldlabs/obsidian-wikilink-types/releases)
+2. Create a `wikilink-types` folder in your vault's `.obsidian/plugins/` directory
+3. Copy the three files into that folder
+4. Enable the plugin in **Settings → Community Plugins**
 
-> **Tip:** Use **Settings → Community Plugins → 📁** (Open plugins folder) to open the plugins directory, then drag the `wikilink-types` folder in.
+> **Tip:** Use **Settings → Community Plugins → 📁** (Open plugins folder) to open the plugins directory.
 
 ## Configuration
 

@@ -5,6 +5,15 @@ All notable changes to Wikilink Types will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-05-19
+
+### Fixed
+
+- Popout window compatibility: replaced bare `document`, `setTimeout`, and `clearTimeout` references with Obsidian-safe `activeDocument`, `activeWindow.setTimeout()`, and `activeWindow.clearTimeout()`
+- Updated dev dependencies to resolve known vulnerabilities (esbuild, vite, picomatch, postcss, brace-expansion, yaml, fast-uri)
+- README: removed outdated placeholder text ("coming soon", "pre-listing"), updated installation instructions to reflect Community Plugins listing
+- Release workflow: removed unnecessary `plugin.zip` asset, added build provenance attestation
+
 ## 2026-04-06
 
 ### Added

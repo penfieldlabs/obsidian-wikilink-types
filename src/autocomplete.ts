@@ -145,14 +145,14 @@ export function buildCompletionExtension(
 			if (!this.isActive) return;
 
 			if (!this.popup) {
-				this.popup = document.createElement("div");
+				this.popup = createDiv();
 				this.popup.className = "wikilink-types-popup";
 				this.popup.setAttribute("role", "listbox");
 				this.popup.setAttribute(
 					"aria-label",
 					"Relationship type suggestions"
 				);
-				document.body.appendChild(this.popup);
+				activeDocument.body.appendChild(this.popup);
 			}
 
 			this.popup.empty();
@@ -160,7 +160,7 @@ export function buildCompletionExtension(
 
 			for (let i = 0; i < this.filtered.length; i++) {
 				const rt = this.filtered[i];
-				const el = document.createElement("div");
+				const el = createDiv();
 				el.className = "wikilink-types-popup-item";
 				el.setAttribute("role", "option");
 				el.setAttribute("aria-selected", String(i === this.selectedIdx));
@@ -168,12 +168,12 @@ export function buildCompletionExtension(
 					el.classList.add("is-selected");
 				}
 
-				const label = document.createElement("div");
+				const label = createDiv();
 				label.className = "wikilink-types-popup-label";
 				label.textContent = rt.label;
 				el.appendChild(label);
 
-				const desc = document.createElement("div");
+				const desc = createDiv();
 				desc.className = "wikilink-types-popup-desc";
 				desc.textContent = rt.description;
 				el.appendChild(desc);

@@ -1,5 +1,5 @@
 import { Notice, Plugin, TFile } from "obsidian";
-import type { RelationshipType, PluginData } from "./types";
+import type { RelationshipType } from "./types";
 import { DEFAULT_RELATIONSHIP_TYPES, loadPluginData } from "./config";
 import { buildCompletionExtension } from "./autocomplete";
 import { syncFrontmatter } from "./sync";
@@ -26,7 +26,7 @@ export default class WikilinkTypesPlugin extends Plugin {
 		if (!raw) {
 			await this.saveData({
 				relationshipTypes: DEFAULT_RELATIONSHIP_TYPES,
-			} as PluginData);
+			});
 		}
 
 		// Register CM6 ViewPlugin + Obsidian Scope for autocomplete
@@ -44,16 +44,16 @@ export default class WikilinkTypesPlugin extends Plugin {
 		);
 	}
 
-	private syncTimers = new Map<string, ReturnType<typeof setTimeout>>();
+	private syncTimers = new Map<string, number>();
 	private syncing = new Set<string>();
 
 	private debouncedSync(file: TFile): void {
 		if (this.syncing.has(file.path)) return;
 
 		const existing = this.syncTimers.get(file.path);
-		if (existing) clearTimeout(existing);
+		if (existing) activeWindow.clearTimeout(existing);
 
-		const timer = setTimeout(() => {
+		const timer = activeWindow.setTimeout(() => {
 			void (async () => {
 				this.syncTimers.delete(file.path);
 				this.syncing.add(file.path);
@@ -72,7 +72,7 @@ export default class WikilinkTypesPlugin extends Plugin {
 
 	onunload(): void {
 		for (const timer of this.syncTimers.values()) {
-			clearTimeout(timer);
+			activeWindow.clearTimeout(timer);
 		}
 		this.syncTimers.clear();
 		this.syncing.clear();
